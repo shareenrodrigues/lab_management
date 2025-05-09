@@ -1,0 +1,130 @@
+<div class="row" style="margin-bottom: 1rem;">
+    <div class="row">&nbsp;</div>
+    <p-button *ngIf="!showBookingForm" label="Add to Cart" icon="pi pi-shopping-cart" class="p-button-success" (onClick)="addToCart()"
+        [disabled]="!selectedTests.length">
+    </p-button>
+    <p-button *ngIf="showBookingForm" label="Back" icon="pi pi-angle-double-left" class="p-button-success" (onClick)="showBookingForm = false;">
+    </p-button>
+</div>
+<div *ngIf="!showBookingForm">
+    <p-table [value]="tests" [paginator]="true" [rows]="10" responsiveLayout="scroll" selectionMode="multiple"
+        [(selection)]="selectedTests" dataKey="testId">
+        <ng-template pTemplate="header">
+            <tr>
+                <th style="width: 4rem"></th>
+                <th>Test Name</th>
+                <th>Code</th>
+                <th>Sample Type</th>
+                <th>Details</th>
+                <th>Price</th>
+                <th>Estimated Time</th>
+            </tr>
+        </ng-template>
+        <ng-template pTemplate="body" let-test>
+            <tr>
+                <td>
+                    <p-tableCheckbox [value]="test"></p-tableCheckbox>
+                </td>
+                <td>{{ test.testName }}</td>
+                <td>{{ test.testCode }}</td>
+                <td>{{ test.sampleType }}</td>
+                <td>{{ test.testDetails }}</td>
+                <td>{{ test.price | currency }}</td>
+                <td>{{ test.estimatedTime }}</td>
+            </tr>
+        </ng-template>
+    </p-table>
+</div>
+
+
+<div *ngIf="showBookingForm" class="booking-form mt-4 px-4 py-3 surface-100 border-round shadow-1">
+    <h3 class="mb-3 text-primary">Book Appointment</h3>
+
+    <p-table [value]="selectedTests" class="mb-4">
+        <ng-template pTemplate="header">
+            <tr>
+                <th>Test Name</th>
+                <th>Price</th>
+            </tr>
+        </ng-template>
+        <ng-template pTemplate="body" let-test>
+            <tr>
+                <td>{{ test.testName }}</td>
+                <td>{{ test.price | currency }}</td>
+            </tr>
+        </ng-template>
+    </p-table>
+
+    <p-card>
+        <div class="p-fluid grid">
+            <div class="col-12 md:col-6">
+                <div class="field flex align-items-center">
+                    <label for="name" class="mr-3" style="width: 120px;">Patient Name</label>
+                    <input pInputText id="name" [(ngModel)]="appointment.patientName" name="patientName" required
+                        class="flex-grow-1" />
+                </div>
+            </div>
+
+            <div class="col-12 md:col-6">
+                <div class="field flex align-items-center">
+                    <label for="age" class="mr-3" style="width: 120px;">Age</label>
+                    <input pInputText id="age" type="number" [(ngModel)]="appointment.age" name="age" min="1"
+                        class="flex-grow-1" />
+                </div>
+            </div>
+
+            <div class="col-12 md:col-6">
+                <div class="field flex align-items-center">
+                    <label for="height" class="mr-3" style="width: 120px;">Height (cm)</label>
+                    <input pInputText id="height" type="number" [(ngModel)]="appointment.height" name="height" min="1"
+                        class="flex-grow-1" />
+                </div>
+            </div>
+
+            <div class="col-12 md:col-6">
+                <div class="field flex align-items-center">
+                    <label for="weight" class="mr-3" style="width: 120px;">Weight (kg)</label>
+                    <input pInputText id="weight" type="number" [(ngModel)]="appointment.weight" name="weight" min="1"
+                        class="flex-grow-1" />
+                </div>
+            </div>
+
+            <div class="col-12 md:col-6">
+                <div class="field flex align-items-center">
+                    <label for="date" class="mr-3" style="width: 120px;">Date</label>
+                    <p-calendar [(ngModel)]="appointment.appointmentDate" [minDate]="minDate" [readonlyInput]="true"
+                        dateFormat="mm/dd/yy" [showIcon]="true" [required]="true" class="flex-grow-1" [showClear]="true">
+                    </p-calendar>
+                </div>
+            </div>
+
+            <div class="col-12 md:col-6">
+                <div class="field flex align-items-center">
+                    <label for="time" class="mr-3" style="width: 120px;">Time</label>
+                    <p-calendar inputId="calendar-timeonly" [(ngModel)]="appointment.appointmentTime" [timeOnly]="true"
+                        [readonlyInput]="true" hourFormat="12" [showIcon]="true" [required]="true" class="flex-grow-1" 
+                        [showClear]="true">
+                    </p-calendar>
+                </div>
+            </div>
+
+            <div class="col-12 text-right mt-3">
+                <strong>Total Cost: </strong><span class="text-success">{{ totalCost | currency }}</span>
+            </div>
+        </div>
+
+    </p-card>
+
+
+
+
+    <div class="p-mt-4 text-center">
+        <button pButton type="button" label="Confirm Appointment" icon="pi pi-check" class="p-button-primary px-4 py-2"
+            (click)="confirmAppointment()" [disabled]="!appointment.patientName || 
+            appointment.age < 1 || 
+            appointment.height < 1 || 
+            appointment.weight < 1 || 
+            !appointment.appointmentDate || 
+            !appointment.appointmentTime"></button>
+    </div>
+</div>

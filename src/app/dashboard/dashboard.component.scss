@@ -1,0 +1,33 @@
+::ng-deep .p-menubar {
+    background-color: rgb(142, 134, 250);
+    border: none;
+    padding: 0.5rem 1rem;
+    color: black;
+  }
+  
+  ::ng-deep .p-menubar .p-menuitem-link {
+    color: black;
+    font-weight: 500;
+  }
+  
+  ::ng-deep .p-menubar .p-menuitem-link:hover {
+    background-color: #a5b1f5;
+    color: black;
+    font-size: large;
+  }
+
+  ::ng-deep .p-menubar .p-menuitem-link.p-highlight {
+    color: #0f2ac2;
+  }
+
+  .dashboard-grid {
+    display: grid;
+    grid-template-columns: repeat(auto-fit, minmax(250px, 1fr));
+    gap: 1.5rem;
+    padding: 2rem;
+  }
+  
+  :host ::ng-deep .dashboard-card {
+    padding: 1rem;
+    text-align: center;
+  }

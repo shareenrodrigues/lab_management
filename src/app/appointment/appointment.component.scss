@@ -1,0 +1,25 @@
+:host ::ng-deep .p-accordion-header {
+    font-weight: 600;
+  }
+  
+
+  ::ng-deep .custom-calendar .p-inputtext {
+    padding: 0.6rem;
+    border-radius: 6px;
+    font-size: 1rem;
+  }
+  
+  ::ng-deep .p-datepicker {
+    box-shadow: 0 4px 12px rgba(0, 0, 0, 0.15);
+    border-radius: 10px;
+  }
+  
+  ::ng-deep .p-datepicker-calendar td {
+    padding: 0.5rem;
+  }
+  
+  ::ng-deep .p-datepicker .p-datepicker-header {
+    background: #f0f0f0;
+    font-weight: 600;
+  }
+  

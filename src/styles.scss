@@ -1,0 +1,9 @@
+/* You can add global styles to this file, and also import other style files */
+:host ::ng-deep .p-toast-message-error {
+    background-color: #ff4d4f;
+    color: white;
+  }
+  :host ::ng-deep .p-toast-message-success {
+    background-color: #52c41a;
+    color: white;
+  }

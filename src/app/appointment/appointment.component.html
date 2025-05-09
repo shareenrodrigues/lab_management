@@ -1,0 +1,83 @@
+<h2 class="mb-3">My Appointments</h2>
+
+<p-accordion *ngIf="appointments.length > 0">
+    <p-accordionTab *ngFor="let appt of appointments; let i = index">
+        <ng-template pTemplate="header">
+            <div class="flex justify-between align-items-center w-full">
+                <div class="font-medium">
+                    <strong>Appointment on</strong> {{ appt.appointmentDate }} at {{ appt.appointmentTime }} for {{
+                    appt.patientName }}
+                </div>
+                <button *ngIf="showClientRole" pButton type="button" icon="pi pi-times" label="Cancel"
+                    class="p-button-danger p-button-sm ml-auto" (click)="cancelAppointment(appt.appointmentId)"
+                    [disabled]="appt.appointmentStatus === 'CANCELLED'">
+                </button>
+                <button *ngIf="appt.appointmentStatus !== 'CANCELLED' && showClientRole" pButton type="button" icon="pi pi-calendar-plus"
+                    label="Reschedule" class="p-button-secondary p-button-sm ml-2" (click)="openRescheduleDialog(appt)">
+                </button>
+                <button *ngIf="!showClientRole" pButton type="button" icon="pi pi-times" label="Reject"
+                    class="p-button-danger p-button-sm ml-auto" (click)="rejectAppointment(appt.appointmentId)"
+                    [disabled]="appt.appointmentStatus === 'CANCELLED' || appt.appointmentStatus === 'REJECTED'">
+                </button>
+            </div>
+        </ng-template>
+
+        <div class="mb-2">
+            <strong>Status:</strong> {{ appt.appointmentStatus }}
+        </div>
+        <div class="mb-2">
+            <strong>Total Cost:</strong> {{ appt.totalCost | currency }}
+        </div>
+
+        <p-table *ngIf="appt.testMappings?.length > 0" [value]="appt.testMappings" class="p-datatable-sm mt-3"
+            [responsiveLayout]="'scroll'">
+            <ng-template pTemplate="header">
+                <tr>
+                    <th>Test Name</th>
+                    <th>Test Code</th>
+                    <th>Price</th>
+                    <th>Status</th>
+                    <th><span icon="pi pi-trash"></span></th>
+                </tr>
+            </ng-template>
+            <ng-template pTemplate="body" let-testMapping>
+                <tr>
+                    <td>{{ testMapping.testName }}</td>
+                    <td>{{ testMapping.testCode }}</td>
+                    <td>{{ testMapping.price | currency }}</td>
+                    <td>{{ testMapping.testStatus }}</td>
+                    <td>
+                        <button pButton type="button" icon="pi pi-trash" class="p-button-danger p-button-sm"
+                            (click)="deleteTestFromAppointment(appt.appointmentId, testMapping)"
+                            [disabled]="appt.appointmentStatus === 'CANCELLED'">
+                        </button>
+                    </td>
+                </tr>
+            </ng-template>
+        </p-table>
+        <p *ngIf="appt.testMappings?.length === 0">No tests found for this appointment.</p>
+    </p-accordionTab>
+</p-accordion>
+
+<p *ngIf="appointments.length === 0">No appointments found.</p>
+
+<p-dialog header="Reschedule Appointment" [(visible)]="rescheduleDialogVisible" [modal]="true" 
+[style]="{ width: '600px', height: '400px' }" [responsive]="true">
+    <div class="p-fluid">
+      <label for="rescheduleDate" class="font-medium">New Date</label>
+      <p-calendar [(ngModel)]="rescheduleForm.appointmentDate" [minDate]="minDate" inputId="rescheduleDate" [style]="{ width: '100%' }"
+      dateFormat="mm-dd-yy"
+      class="custom-calendar"></p-calendar>
+  
+      <label for="rescheduleTime" class="font-medium mt-3">New Time</label>
+      <p-calendar [(ngModel)]="rescheduleForm.appointmentTime" [timeOnly]="true" hourFormat="12" inputId="rescheduleTime" 
+      [style]="{ width: '100%' }"
+      class="custom-calendar"></p-calendar>
+    </div>
+  
+    <ng-template pTemplate="footer">
+      <button pButton label="Cancel" icon="pi pi-times" (click)="rescheduleDialogVisible = false" class="p-button-text"></button>
+      <button pButton label="Save" icon="pi pi-check" (click)="submitReschedule()" class="p-button-success"></button>
+    </ng-template>
+  </p-dialog>
+  

@@ -1,0 +1,35 @@
+<div class="card">
+    <div class="row">
+        <h2>Welcome, Doll!!</h2>
+    </div>
+   
+    <div class="dashboard-grid" *ngIf="showClientRole">
+        <p-card header="Tests" styleClass="dashboard-card">
+          <p>View available lab tests and book new ones.</p>
+          <button pButton label="Book Tests" icon="pi pi-list" class="p-button-sm" (click)="loadTests()"></button>
+
+        </p-card>
+      
+        <p-card header="Appointments" styleClass="dashboard-card">
+          <p>Manage and view your upcoming lab appointments.</p>
+          <button pButton label="My Appointments" icon="pi pi-calendar" (click)="loadAppointments()" class="p-button-sm"></button>
+        </p-card>
+      
+        <!-- <p-card header="Results" styleClass="dashboard-card">
+          <p>Access your recent test results and reports.</p>
+          <button pButton label="View Results" icon="pi pi-file" class="p-button-sm"></button>
+        </p-card> -->
+      
+      </div>
+      <div class="dashboard-grid" *ngIf="!showClientRole">
+        <p-card header="Appointments" styleClass="dashboard-card">
+          <p>Manage and view upcoming lab appointments.</p>
+          <button pButton label="Manage Appointments" icon="pi pi-calendar" (click)="loadAppointments()" class="p-button-sm"></button>
+        </p-card>
+      
+        <!-- <p-card header="Results" styleClass="dashboard-card">
+          <p>Enter recent test results and reports.</p>
+          <button pButton label="Enter Results" icon="pi pi-file" class="p-button-sm"></button>
+        </p-card> -->
+      </div>
+</div>
