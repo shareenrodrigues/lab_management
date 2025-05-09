@@ -31,3 +31,14 @@ build/
 
 ### VS Code ###
 .vscode/
+
+
+# Angular
+/dist/
+/node_modules/
+
+# Spring Boot
+/target/
+/*.iml
+*.log
+
