@@ -85,6 +85,10 @@ spring.datasource.password=labmanager
 
 ---
 
+##SQL Scripts
+
+Get SQl scripts in '/Scripts' folder.
+
 ## User Roles
 
 | Role   | Permissions                                               |
