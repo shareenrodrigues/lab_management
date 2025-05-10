@@ -17,6 +17,5 @@ import { MessageService } from 'primeng/api';
 export class AppComponent {
   title = 'lab-management-client';
   constructor(){
-    console.log('AppComponent loaded');
   }
 }

@@ -41,11 +41,9 @@ export class LoginComponent  implements OnInit{
 
   onSubmit(): void {
     debugger;
-    console.log("LO")
     const { email, password } = this.loginForm.value;
     this.loginService.login(email, password).subscribe({
       next: (response) => {
-        console.log('Login success:', response);
         this.messageService.add({
           severity: 'success',
           summary: 'Login Successful',

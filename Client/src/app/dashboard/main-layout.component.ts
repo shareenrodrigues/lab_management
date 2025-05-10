@@ -29,8 +29,8 @@ export class MainLayoutComponent {
         {
             this.items = [
                 { label: 'Home', icon: 'pi pi-home', routerLink: ['/dashboard',this.userRole] },
-                { label: 'Appointments', icon: 'pi pi-calendar-plus', routerLink: ['/appointments', this.userRole] },
-              //  { label: 'Enter Results', icon: 'pi pi-file', routerLink: ['/results', this.userRole] },
+                { label: 'Manage Appointments', icon: 'pi pi-calendar-plus', routerLink: ['/appointments', this.userRole] },
+               { label: 'View Results', icon: 'pi pi-file', routerLink: ['/results', this.userRole] },
             ];
         }
         else{
@@ -38,7 +38,7 @@ export class MainLayoutComponent {
                 { label: 'Home', icon: 'pi pi-home', routerLink: ['/dashboard', this.userRole] },
                 { label: 'View Tests', icon: 'pi pi-list', routerLink: ['/tests', this.userRole ]},
                 { label: 'My Appointments', icon: 'pi pi-calendar-plus', routerLink: ['/appointments', this.userRole] },
-              //  { label: 'View Results', icon: 'pi pi-file', routerLink: ['/results', this.userRole] },
+               { label: 'View Results', icon: 'pi pi-file', routerLink: ['/results', this.userRole] },
             ];
         }
         

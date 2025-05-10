@@ -43,6 +43,10 @@ export class DashboardComponent implements OnInit {
     this.router.navigate(['/appointments', this.userRole]);
   }
 
+  loadResults(){
+    this.router.navigate(['/results', this.userRole]);
+  }
+
   logout() {
     this.router.navigate(['/']);
   }

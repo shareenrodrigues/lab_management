@@ -21,6 +21,7 @@ import org.springframework.web.bind.annotation.RestController;
 
 import com.lab.lab_management.dtoModels.AppointmentRequestDTO;
 import com.lab.lab_management.dtoModels.AppointmentResponseDTO;
+import com.lab.lab_management.dtoModels.AppointmentTestResultsDTO;
 import com.lab.lab_management.model.*;
 import com.lab.lab_management.repository.AppointmentRepository;
 import com.lab.lab_management.repository.AppointmentTestMappingRepository;
@@ -46,6 +47,7 @@ public class AppointmentController {
     @Autowired
     private AppointmentRepository appointmentRepository;
 
+    //create appointment
     @PostMapping("/createAppointment")
     public ResponseEntity<Appointment> createAppointment(@RequestBody AppointmentRequestDTO dto) {
         Appointment appointment = new Appointment();
@@ -67,7 +69,7 @@ public class AppointmentController {
         // Save appointment first
         Appointment saved = appointmentService.saveAppointment(appointment);
 
-        // Link tests (if applicable)
+        // Add test mappings
         for (Long testId : dto.testIds) {
             Test test = testRepository.findById(testId)
                     .orElseThrow(() -> new RuntimeException("Test not found"));
@@ -81,20 +83,23 @@ public class AppointmentController {
         return new ResponseEntity<>(saved, HttpStatus.CREATED);
     }
 
+    //get appointment details for a user
     @GetMapping("/user/{userId}")
     public ResponseEntity<List<AppointmentResponseDTO>> getAppointmentsByUser(@PathVariable Long userId) {
         List<AppointmentResponseDTO> appointments = appointmentService.getAppointmentsByUserId(userId);
         return ResponseEntity.ok(appointments);
     }
 
+    //get all appointments
     @GetMapping()
     public ResponseEntity<List<AppointmentResponseDTO>> getAllAppointments() {
         List<AppointmentResponseDTO> appointments = appointmentService.getAllAppointments();
         return ResponseEntity.ok(appointments);
     }
 
+    //cancel appointment for users
     @PutMapping("/cancelAppointment/{id}")
-    public ResponseEntity<Appointment> cancelAppointment(@PathVariable Integer id) {
+    public ResponseEntity<AppointmentResponseDTO> cancelAppointment(@PathVariable Integer id) {
         Appointment appt = appointmentRepository.findById(id)
                 .orElseThrow(() -> new RuntimeException("Appointment not found"));
 
@@ -105,9 +110,11 @@ public class AppointmentController {
         }
 
         Appointment updated = appointmentRepository.save(appt);
-        return ResponseEntity.ok(updated);
+        AppointmentResponseDTO dto = appointmentService.convertToResponseDTO(updated);
+        return ResponseEntity.ok(dto);
     }
 
+    //delete tests linked to a client's appointment
     @DeleteMapping("/{appointmentId}/test/{testId}")
     public ResponseEntity<Void> deleteTestFromAppointment(@PathVariable Integer appointmentId,
             @PathVariable Long testId) {
@@ -122,8 +129,9 @@ public class AppointmentController {
         return ResponseEntity.noContent().build();
     }
 
+    //reject appointment by lab staff
     @PutMapping("/rejectAppointment/{id}")
-    public ResponseEntity<Appointment> rejectAppointment(@PathVariable Integer id) {
+    public ResponseEntity<AppointmentResponseDTO> rejectAppointment(@PathVariable Integer id) {
         Appointment appt = appointmentRepository.findById(id)
                 .orElseThrow(() -> new RuntimeException("Appointment not found"));
 
@@ -134,12 +142,15 @@ public class AppointmentController {
         }
 
         Appointment updated = appointmentRepository.save(appt);
-        return ResponseEntity.ok(updated);
+        AppointmentResponseDTO dto = appointmentService.convertToResponseDTO(updated);
+        return ResponseEntity.ok(dto);
     }
 
+    //reschedule appointment date and time
     @PutMapping("/reschedule/{id}")
-    public ResponseEntity<Appointment> rescheduleAppointment(@PathVariable Integer id,
+    public ResponseEntity<AppointmentResponseDTO> rescheduleAppointment(@PathVariable Integer id,
             @RequestBody Map<String, String> payload) {
+
         Appointment appt = appointmentRepository.findById(id)
                 .orElseThrow(() -> new RuntimeException("Appointment not found"));
 
@@ -147,7 +158,27 @@ public class AppointmentController {
         appt.setAppointmentTime(LocalTime.parse(payload.get("appointmentTime")));
         appt.setAppointmentStatus("RESCHEDULED");
 
-        return ResponseEntity.ok(appointmentRepository.save(appt));
+        Appointment updated = appointmentRepository.save(appt);
+
+        AppointmentResponseDTO dto = appointmentService.convertToResponseDTO(updated);
+
+        return ResponseEntity.ok(dto);
     }
 
+    //get testResults for a user
+    @GetMapping("/user/{userId}/details")
+    public ResponseEntity<List<AppointmentTestResultsDTO>> getFullDetails(@PathVariable Long userId) {
+        List<AppointmentTestResultsDTO> list = appointmentService.getAppointmentWithTestsAndResults(userId);
+        return ResponseEntity.ok(list);
+    }
+
+    //get allTestResults
+    @GetMapping("/allResults")
+    public ResponseEntity<List<AppointmentTestResultsDTO>> getAllDetails() {
+        List<AppointmentTestResultsDTO> list = appointmentService.getAllAppointmentWithTestsAndResults();
+            return ResponseEntity.ok(list);
+    }
+
+    
+    
 }

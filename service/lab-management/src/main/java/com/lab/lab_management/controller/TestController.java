@@ -6,6 +6,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
+import java.util.Comparator;
 import java.util.List;
 
 @RestController
@@ -19,16 +20,15 @@ public class TestController {
     @GetMapping
     public ResponseEntity<List<Test>> getAllTests() {
         List<Test> tests = testRepository.findAll();
+         tests.sort(Comparator.comparing(Test::getTestName, String.CASE_INSENSITIVE_ORDER));
         return ResponseEntity.ok(tests);
     }
 
-    //Get a test by ID
+    //Get test by ID
     @GetMapping("/{id}")
     public ResponseEntity<Test> getTestById(@PathVariable Long id) {
         return testRepository.findById(id)
                 .map(ResponseEntity::ok)
                 .orElse(ResponseEntity.notFound().build());
     }
-
-    
 }

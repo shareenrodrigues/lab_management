@@ -1,6 +1,6 @@
 <div class="card">
     <div class="row">
-        <h2>Welcome, Doll!!</h2>
+        <h2>Welcome!</h2>
     </div>
    
     <div class="dashboard-grid" *ngIf="showClientRole">
@@ -15,10 +15,10 @@
           <button pButton label="My Appointments" icon="pi pi-calendar" (click)="loadAppointments()" class="p-button-sm"></button>
         </p-card>
       
-        <!-- <p-card header="Results" styleClass="dashboard-card">
-          <p>Access your recent test results and reports.</p>
+        <p-card header="Results" styleClass="dashboard-card">
+          <p>Access your test results and reports.</p>
           <button pButton label="View Results" icon="pi pi-file" class="p-button-sm"></button>
-        </p-card> -->
+        </p-card>
       
       </div>
       <div class="dashboard-grid" *ngIf="!showClientRole">
@@ -27,9 +27,9 @@
           <button pButton label="Manage Appointments" icon="pi pi-calendar" (click)="loadAppointments()" class="p-button-sm"></button>
         </p-card>
       
-        <!-- <p-card header="Results" styleClass="dashboard-card">
-          <p>Enter recent test results and reports.</p>
-          <button pButton label="Enter Results" icon="pi pi-file" class="p-button-sm"></button>
-        </p-card> -->
+        <p-card header="Results" styleClass="dashboard-card">
+          <p>View test results and reports.</p>
+          <button pButton label="View Results" icon="pi pi-file" (click)="loadResults()" class="p-button-sm"></button>
+        </p-card>
       </div>
 </div>

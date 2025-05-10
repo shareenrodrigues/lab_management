@@ -1,0 +1,41 @@
+<h2>View Results</h2>
+
+<div *ngIf="loading" class="flex justify-content-center align-items-center" style="height: 200px;">
+  <p-progressSpinner strokeWidth="4" animationDuration=".5s"></p-progressSpinner>
+</div>
+
+<p-accordion *ngIf="appointmentDetails.length > 0 && !loading" [multiple]="true">
+  <p-accordionTab *ngFor="let appt of appointmentDetails" 
+                  [header]="'Appointment on ' + appt.date + ' at ' + appt.time + ' for ' + appt.patientName">
+
+    <div class="mb-2"><strong>Status:</strong> {{ appt.appointmentStatus }}</div>
+    <div class="mb-2"><strong>Total Cost:</strong> {{ appt.totalCost | currency }}</div>
+
+    <p-table [value]="appt.testResults" class="p-datatable-sm mt-3" [responsiveLayout]="'scroll'">
+      <ng-template pTemplate="header">
+        <tr>
+          <th>Test Name</th>
+          <th>Test Code</th>
+          <th>Price</th>
+          <th>Status</th>
+          <th>Result</th>
+        </tr>
+      </ng-template>
+      <ng-template pTemplate="body" let-test>
+        <tr>
+          <td>{{ test.testName }}</td>
+          <td>{{ test.testCode }}</td>
+          <td>{{ test.price | currency }}</td>
+          <td>{{ test.testStatus }}</td>
+          <td>
+            <span *ngIf="test.resultValue">{{ test.resultValue }} {{ test.resultUnit }}</span>
+            <span *ngIf="!test.resultValue">—</span>
+          </td>
+        </tr>
+      </ng-template>
+    </p-table>
+
+  </p-accordionTab>
+</p-accordion>
+
+<p *ngIf="appointmentDetails.length === 0 && !loading">No results available.</p>

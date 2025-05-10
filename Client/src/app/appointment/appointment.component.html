@@ -1,6 +1,11 @@
-<h2 class="mb-3">My Appointments</h2>
+<h2 *ngIf="showClientRole" class="mb-3">My Appointments</h2>
+<h2 *ngIf="!showClientRole" class="mb-3">Manage Appointments</h2>
 
-<p-accordion *ngIf="appointments.length > 0">
+<div *ngIf="loading" class="flex justify-content-center align-items-center" style="height: 200px;">
+  <p-progressSpinner strokeWidth="4" animationDuration=".5s"></p-progressSpinner>
+</div>
+
+<p-accordion *ngIf="appointments.length > 0 && !loading">
     <p-accordionTab *ngFor="let appt of appointments; let i = index">
         <ng-template pTemplate="header">
             <div class="flex justify-between align-items-center w-full">
@@ -10,14 +15,17 @@
                 </div>
                 <button *ngIf="showClientRole" pButton type="button" icon="pi pi-times" label="Cancel"
                     class="p-button-danger p-button-sm ml-auto" (click)="cancelAppointment(appt.appointmentId)"
-                    [disabled]="appt.appointmentStatus === 'CANCELLED'">
+                    [disabled]="appt.appointmentStatus === 'CANCELLED' || appt.appointmentStatus === 'COMPLETED'
+                     || appt.appointmentStatus === 'REJECTED'">
                 </button>
-                <button *ngIf="appt.appointmentStatus !== 'CANCELLED' && showClientRole" pButton type="button" icon="pi pi-calendar-plus"
+                <button *ngIf="(appt.appointmentStatus !== 'CANCELLED'  || appt.appointmentStatus !== 'COMPLETED'
+                     || appt.appointmentStatus != 'REJECTED') && showClientRole" pButton type="button" icon="pi pi-calendar-plus"
                     label="Reschedule" class="p-button-secondary p-button-sm ml-2" (click)="openRescheduleDialog(appt)">
                 </button>
                 <button *ngIf="!showClientRole" pButton type="button" icon="pi pi-times" label="Reject"
                     class="p-button-danger p-button-sm ml-auto" (click)="rejectAppointment(appt.appointmentId)"
-                    [disabled]="appt.appointmentStatus === 'CANCELLED' || appt.appointmentStatus === 'REJECTED'">
+                    [disabled]="appt.appointmentStatus === 'CANCELLED' || appt.appointmentStatus === 'COMPLETED'
+                     || appt.appointmentStatus === 'REJECTED'">
                 </button>
             </div>
         </ng-template>
@@ -37,7 +45,7 @@
                     <th>Test Code</th>
                     <th>Price</th>
                     <th>Status</th>
-                    <th><span icon="pi pi-trash"></span></th>
+                    <th *ngIf="showClientRole"><span icon="pi pi-trash"></span></th>
                 </tr>
             </ng-template>
             <ng-template pTemplate="body" let-testMapping>
@@ -46,10 +54,11 @@
                     <td>{{ testMapping.testCode }}</td>
                     <td>{{ testMapping.price | currency }}</td>
                     <td>{{ testMapping.testStatus }}</td>
-                    <td>
+                    <td *ngIf="showClientRole">
                         <button pButton type="button" icon="pi pi-trash" class="p-button-danger p-button-sm"
                             (click)="deleteTestFromAppointment(appt.appointmentId, testMapping)"
-                            [disabled]="appt.appointmentStatus === 'CANCELLED'">
+                            [disabled]="appt.appointmentStatus === 'CANCELLED' || appt.appointmentStatus === 'COMPLETED'
+                     || appt.appointmentStatus === 'REJECTED'">
                         </button>
                     </td>
                 </tr>
@@ -59,7 +68,7 @@
     </p-accordionTab>
 </p-accordion>
 
-<p *ngIf="appointments.length === 0">No appointments found.</p>
+<p *ngIf="appointments.length === 0 && !loading">No appointments found.</p>
 
 <p-dialog header="Reschedule Appointment" [(visible)]="rescheduleDialogVisible" [modal]="true" 
 [style]="{ width: '600px', height: '400px' }" [responsive]="true">

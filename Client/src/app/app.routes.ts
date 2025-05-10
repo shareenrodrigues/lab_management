@@ -4,6 +4,7 @@ import { DashboardComponent } from './dashboard/dashboard.component';
 import { TestComponent } from './test/test.component';
 import { MainLayoutComponent } from './dashboard/main-layout.component';
 import { AppointmentsComponent } from './appointment/appointment.component';
+import { ResultComponent } from './results/results.component';
 
 export const routes: Routes = [
     { path: '', title: 'Lab Management System', component: LoginComponent,},
@@ -13,9 +14,8 @@ export const routes: Routes = [
       children: [
         { path: 'dashboard/:role', component: DashboardComponent },
         { path: 'tests/:role', component: TestComponent },
-        { path: 'appointments/:role', component: AppointmentsComponent }
+        { path: 'appointments/:role', component: AppointmentsComponent },
+        { path: 'results/:role', component: ResultComponent }
       ]
     }
-    // { path: 'dashboard', title:'Home', component : DashboardComponent},
-    // { path: 'tests', component: TestComponent }
 ];

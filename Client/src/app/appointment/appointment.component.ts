@@ -10,6 +10,7 @@ import { CalendarModule } from 'primeng/calendar';
 import { DialogModule } from 'primeng/dialog';
 import { ToastModule } from 'primeng/toast';
 import { FormsModule } from '@angular/forms';
+import { ProgressSpinnerModule } from 'primeng/progressspinner';
 
 
 @Component({
@@ -17,7 +18,7 @@ import { FormsModule } from '@angular/forms';
     standalone: true,
     templateUrl: './appointment.component.html',
     imports: [
-        AccordionModule, CommonModule, ButtonModule,
+        AccordionModule, CommonModule, ButtonModule, ProgressSpinnerModule,
         TableModule, CalendarModule, DialogModule, ToastModule, FormsModule],
     styleUrls: ['./appointment.component.scss']
 })
@@ -27,6 +28,8 @@ export class AppointmentsComponent implements OnInit {
     userRole: string | undefined;
     showClientRole: boolean = false;
     rescheduleDialogVisible = false;
+    loading: boolean = false;
+
     rescheduleForm = {
         appointmentId: 0,
         appointmentDate: null as Date | null,
@@ -34,11 +37,13 @@ export class AppointmentsComponent implements OnInit {
     };
     minDate: Date = new Date();
 
-    constructor(private appointmentService: AppointmentService, private messageService: MessageService, private route: ActivatedRoute) {
+    constructor(private appointmentService: AppointmentService, private messageService: MessageService, 
+        private route: ActivatedRoute) {
 
     }
 
     ngOnInit(): void {
+        this.loading = true;
         this.route.paramMap.subscribe(params => {
             this.userRole = params.get('role')?.toString();
         });
@@ -51,10 +56,11 @@ export class AppointmentsComponent implements OnInit {
             this.appointmentService.getAppointmentsByUser(userId).subscribe({
                 next: (data) => {
                     this.appointments = data;
-                    console.log('Fetched appointments:', data);
+                    this.loading = false;
                 },
                 error: (err) => {
                     console.error('Error fetching appointments:', err);
+                    this.loading = false;
                 }
             });
         }
@@ -62,10 +68,11 @@ export class AppointmentsComponent implements OnInit {
             this.appointmentService.getAllAppointments().subscribe({
                 next: (data) => {
                     this.appointments = data;
-                    console.log('Fetched appointments:', data);
+                    this.loading = false;
                 },
                 error: (err) => {
                     console.error('Error fetching appointments:', err);
+                    this.loading = false;
                 }
             });
         }
