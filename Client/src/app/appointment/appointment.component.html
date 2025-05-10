@@ -18,8 +18,8 @@
                     [disabled]="appt.appointmentStatus === 'CANCELLED' || appt.appointmentStatus === 'COMPLETED'
                      || appt.appointmentStatus === 'REJECTED'">
                 </button>
-                <button *ngIf="(appt.appointmentStatus !== 'CANCELLED'  || appt.appointmentStatus !== 'COMPLETED'
-                     || appt.appointmentStatus != 'REJECTED') && showClientRole" pButton type="button" icon="pi pi-calendar-plus"
+                <button *ngIf="(appt.appointmentStatus !== 'CANCELLED'  && appt.appointmentStatus !== 'COMPLETED'
+                     && appt.appointmentStatus != 'REJECTED') && showClientRole" pButton type="button" icon="pi pi-calendar-plus"
                     label="Reschedule" class="p-button-secondary p-button-sm ml-2" (click)="openRescheduleDialog(appt)">
                 </button>
                 <button *ngIf="!showClientRole" pButton type="button" icon="pi pi-times" label="Reject"
