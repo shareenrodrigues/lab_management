@@ -18,11 +18,19 @@ public class UserService {
     }
 
     public Optional<User> findByEmail(String email) {
-        return userRepository.findByEmail((email));
+        try{
+             return userRepository.findByEmail((email));
+        }
+        catch(Exception ex){
+           throw new RuntimeException(
+                    "Failed to findByEmail: " + ex.getMessage(), ex);
+        }
+       
     }
 
     public Optional<User> login(String email, String password) {
-        Optional<User> userOpt = userRepository.findByEmail(email);
+        try{
+            Optional<User> userOpt = userRepository.findByEmail(email);
         if (userOpt.isPresent()) {
             User user = userOpt.get();
             if (user.getPassword().equals(password)) {
@@ -30,5 +38,10 @@ public class UserService {
             }
         }
         return Optional.empty();
+        }
+        catch(Exception ex){
+            throw new RuntimeException(
+                    "Failed to login: " + ex.getMessage(), ex);
+        }
     }
 }
